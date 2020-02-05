@@ -108,12 +108,29 @@
   _.uniq = function(array, isSorted, iterator) {
     //loop through array
     //create storage array
+    //check in storage array
     //if num doesnt exist in storage
     //push it
     //return storage
-    var uniques = [];
-    //for(var i = 0; )
 
+    var uniques = [];
+    var iterator = arguments[1];
+
+    for (var i = 0; i < array.length; i++) {
+      var currentEl = array[i];
+      console.log(iterator);
+      if (iterator) {
+        var iterated = iterator(currentEl);
+        // currentEl =
+      }
+      if (!uniques.includes(currentEl)) {
+        uniques.push(currentEl);
+      }
+    }
+    if (isSorted === true) {
+      console.log('hit');
+    }
+    return uniques;
   };
 
 
@@ -122,6 +139,15 @@
     // map() is a useful primitive iteration function that works a lot
     // like each(), but in addition to running the operation on all
     // the members, it also maintains an array of results.
+    // apply iterator to each item in collection - objects & arrays
+    // return new array with iterated values
+
+    var iterated = [];
+    _.each(collection, function(item) {
+      var newItem = iterator(item);
+      iterated.push(newItem);
+    });
+    return iterated;
   };
 
   /*
@@ -163,6 +189,27 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
+    //account for arrays and objects - chceck first
+    //loop through collection
+    //pass each item and accumulator into iterator
+    //return accumulator
+    //
+    var start = 0;
+    if (Array.isArray(collection)) {
+      if(accumulator === undefined) {
+        accumulator = collection[0];
+        start = 1;
+      }
+
+      for (var i = start; i < collection.length; i++) {
+        accumulator = iterator(accumulator, collection[i]);
+      }
+    } else {
+      for(var key in collection) {
+        accumulator = iterator(accumulator, collection[key]);
+      }
+    }
+    return accumulator;
   };
 
   // Determine if the array or object contains a given value (using `===`).

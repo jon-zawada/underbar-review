@@ -474,7 +474,6 @@
           // for a working implementation of reduce
 
           orderTraversed.push(item);
-          //COMEBACK
           return memo;
         }, 10);
 
