@@ -112,23 +112,23 @@
     //if num doesnt exist in storage
     //push it
     //return storage
-
+    var iteratedArray = [];
     var uniques = [];
-    var iterator = arguments[1];
-
-    for (var i = 0; i < array.length; i++) {
-      var currentEl = array[i];
-      console.log(iterator);
-      if (iterator) {
-        var iterated = iterator(currentEl);
-        // currentEl =
+    var unsortedIndex = 0;
+    if (isSorted) {
+      for (var i = 0; i < array.length; i++) {
+        if (iteratedArray.indexOf(iterator(array[i])) === -1) {
+          iteratedArray.push(iterator(array[i]));
+          uniques.push(array[i]);
+        }
       }
-      if (!uniques.includes(currentEl)) {
-        uniques.push(currentEl);
+    } else {
+      for (var j = 0; j < array.length; j++) {
+        unsortedIndex = uniques.indexOf(array[j]);
+        if (unsortedIndex === -1) {
+          uniques.push(array[j]);
+        }
       }
-    }
-    if (isSorted === true) {
-      console.log('hit');
     }
     return uniques;
   };
@@ -196,7 +196,7 @@
     //
     var start = 0;
     if (Array.isArray(collection)) {
-      if(accumulator === undefined) {
+      if (accumulator === undefined) {
         accumulator = collection[0];
         start = 1;
       }
@@ -205,7 +205,7 @@
         accumulator = iterator(accumulator, collection[i]);
       }
     } else {
-      for(var key in collection) {
+      for (var key in collection) {
         accumulator = iterator(accumulator, collection[key]);
       }
     }
@@ -228,12 +228,39 @@
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
+    // var testStatus = true;
+    // _.each(collection, function(item){
+    //   if (!iterator) {
+    //     if(!item) {
+    //       testStatus = false;
+    //     }
+    //   }
+    //   else if(!iterator(item)){
+    //       testStatus = false;
+    //     }
+    // });
+    // return testStatus;
+    return _.reduce(collection, function(trueStatus, item) {
+      iterator = iterator || _.identity;
+      if (trueStatus && iterator(item)) {
+        return true;
+      }
+      return false;
+    }, true);
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
+    return _.reduce(collection, function(trueStatus, item) {
+      iterator = iterator || _.identity;
+      if (trueStatus || iterator(item)) {
+        return true;
+      } else {
+        return false;
+      }
+    }, false);
   };
 
 
@@ -256,6 +283,12 @@
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    _.each(arguments, function(objS) {
+      for (var key in objS) {
+        obj[key] = objS[key];
+      }
+    });
+    return obj;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
