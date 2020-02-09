@@ -360,6 +360,25 @@
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
+    /*
+    I an array
+    O a shuffled version of the input array
+    C we cannot modifiy the input array
+    E anything that isnt an array?
+    */
+
+    //this function will take in an array and return a shuffled version of that array
+    //We will take in an array and copy its content, then we will iterate over every element in that copyArray and randomly push it to a new array while deleteing the ones that have been copied already
+    var temp = array.slice(0, array.length);
+    var shuffled = [];
+
+    for (var i = 0; i < array.length; i++) {
+      var randomIndex = Math.floor(Math.random() * temp.length);
+      shuffled.push(temp[randomIndex]);
+      temp.splice(randomIndex, 1);
+    }
+
+    return shuffled;
   };
 
 
