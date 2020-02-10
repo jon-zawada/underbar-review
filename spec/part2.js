@@ -273,7 +273,10 @@
       it('should copy any property whose key is not already set on the target', function() {
         // Replace this line with an `expect` statement that tests
         // the behavior described by the `it` string
-        throw new Error('This test is missing.');
+        var obj = {x: 1};
+        var obj2 = {a: 2};
+        var defaults = _.defaults(obj, obj2);
+        expect(defaults.a).to.equal(2);
       });
 
       it('should not copy a property if that key is already set on the target', function() {
